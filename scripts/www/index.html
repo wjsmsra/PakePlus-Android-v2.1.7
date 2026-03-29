@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>英语单词大比拼 - 单人百词斩模式</title>
+    <title>英语单词大比拼 - 单人百词砍模式</title>
     <style>
+        /* ========== 保留原有所有样式 (与之前版本一致) ========== */
         * {
             margin: 0;
             padding: 0;
@@ -96,6 +97,8 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
         }
         
         .control-btn:hover {
@@ -118,6 +121,7 @@
             min-width: 90px;
             max-width: 120px;
             padding: 8px 6px;
+            touch-action: manipulation;
         }
         
         #controlBtn {
@@ -133,6 +137,7 @@
             box-shadow: 0 3px 10px rgba(255, 77, 79, 0.3);
             min-width: 160px;
             flex: 2;
+            touch-action: manipulation;
         }
         
         #controlBtn:hover {
@@ -260,6 +265,7 @@
             min-height: 75px;
             width: 100%;
             flex-shrink: 0;
+            touch-action: manipulation;
         }
         
         .option-btn:hover {
@@ -374,7 +380,7 @@
         
         .word-list-container {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
-            padding: 18px;
+            padding: 18px 18px 25px 18px; /* 增加底部内边距确保按钮不贴边 */
             border-radius: 18px;
             text-align: center;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
@@ -387,6 +393,8 @@
             display: flex;
             flex-direction: column;
             min-height: 580px;
+            /* 确保容器内部不溢出 */
+            overflow-y: auto; /* 整体内容过多时滚动，避免按钮被裁切 */
         }
         
         .word-list-title {
@@ -398,6 +406,7 @@
             text-align: center;
             border-bottom: 3px solid #1890ff;
             padding-bottom: 8px;
+            flex-shrink: 0;
         }
         
         .word-list-header {
@@ -411,6 +420,7 @@
             border: 2px solid rgba(24, 144, 255, 0.3);
             text-align: center;
             line-height: 1.4;
+            flex-shrink: 0;
         }
         
         .word-list-close-btn {
@@ -425,10 +435,15 @@
             transition: all 0.3s;
             box-shadow: 0 3px 10px rgba(255, 77, 79, 0.25);
             border: 2px solid rgba(255, 255, 255, 0.5);
-            margin: 15px auto;
+            margin: 15px auto 0; /* 上边距15px，左右auto，底部0，使其在flex列中靠下 */
             display: block;
             width: 90%;
             max-width: 300px;
+            touch-action: manipulation;
+            flex-shrink: 0; /* 防止被压缩 */
+            /* 确保按钮完全在容器内 */
+            position: relative;
+            bottom: 0;
         }
         
         .word-list-close-btn:hover {
@@ -442,9 +457,10 @@
             border-radius: 10px;
             padding: 15px;
             margin: 10px 0;
-            flex: 1;
-            min-height: 400px;
-            max-height: 500px;
+            flex: 1; /* 占据剩余空间，允许滚动 */
+            /* 调整最大高度，让按钮有足够空间显示 */
+            max-height: 400px; /* 从500px减少到400px，向上收缩 */
+            min-height: 300px; /* 同时调整最小高度，确保美观 */
             overflow-y: auto;
             border: 3px solid #40a9ff;
             display: flex;
@@ -506,6 +522,7 @@
             border-radius: 6px;
             border: 2px solid rgba(82, 196, 26, 0.3);
             text-align: center;
+            flex-shrink: 0;
         }
         
         #victoryOverlay {
@@ -531,17 +548,19 @@
         }
         
         .victory-container {
-            background: linear-gradient(135deg, #add8e6 0%, #87cefa 100%);
+            /* 修改为单色 #F0F9F1，去除渐变 */
+            background: #F0F9F1;
             padding: 18px;
             border-radius: 18px;
             text-align: center;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
             max-width: 95%;
             width: 95%;
-            max-height: 90vh;
+            /* 移除最大高度限制，让卡片完全自由伸展 */
+            max-height: none;
             animation: zoomIn 0.8s ease-out;
             margin: auto;
-            border: 4px solid #FFD700;
+            border: 4px solid #A5D6A7;
             display: flex;
             flex-direction: column;
             min-height: auto;
@@ -566,20 +585,25 @@
         
         .victory-username {
             font-size: 36px;
-            color: #722ed1;
+            color: #1E4A6F;
             font-weight: bold;
             margin-bottom: 2px;
             line-height: 1.2;
             text-align: center;
             flex-shrink: 0;
+            /* ===== 增强姓名阴影效果（更明显） ===== */
+            text-shadow: 0.06em 0.06em 0.15em rgba(0, 0, 0, 0.5);
         }
         
+        /* ===== 励志语基础样式 + 立体阴影效果（所有励志语都带阴影） ===== */
         .victory-message {
             font-size: 24px;
             margin: 2px 0;
             font-weight: bold;
             line-height: 1.3;
             flex-shrink: 0;
+            /* 立体阴影效果：向右下偏移 + 轻微发光 (与满分容器阴影一致) */
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.4);
         }
         
         .file-name-display {
@@ -612,7 +636,8 @@
             margin: 2px 0;
             font-weight: bold;
             line-height: 1.3;
-            background: rgba(255, 255, 255, 0.7);
+            /* 修改背景色与显示单词表的容器（.file-name-display）背景色一致 */
+            background: rgba(255, 255, 255, 0.85);
             padding: 10px;
             border-radius: 8px;
             display: flex;
@@ -623,6 +648,8 @@
             max-height: 130px;
             overflow: hidden;
             flex-shrink: 0;
+            border: 1px solid rgba(24, 144, 255, 0.4);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         
         .score-line {
@@ -642,7 +669,7 @@
         
         .accuracy-rate {
             font-size: 20px;
-            color: #1890ff;
+            color: #FF8C00; /* 橙色，符合要求 */
             font-weight: bold;
         }
         
@@ -652,7 +679,7 @@
             font-weight: bold;
         }
         
-        /* ========== 关键修改：未过关单词容器固定尺寸 ========== */
+        /* ========== 未过关单词容器：高度自动，但设定最小高度以容纳4个单词 ========== */
         .failed-words-container {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
@@ -661,17 +688,14 @@
             border: 3px solid #ff4d4f;
             display: flex;
             flex-direction: column;
-            
-            /* 固定尺寸：与满分时三行励志语所占高度一致，确保换行时尺寸不变 */
-            height: 230px;            /* 电脑端基准高度 */
-            max-height: 230px;
-            min-height: 230px;
             width: 100%;
             flex-shrink: 0;
-            overflow: hidden;
+            /* 移除固定高度，让容器根据内容撑开，但设定最小高度容纳4个单词 */
+            height: auto;
+            max-height: none;
+            min-height: 240px;  /* 这个值确保能容纳4个单词（每个单词约45-50px高度 + 标题和内边距） */
         }
         
-        /* 内部标题区高度固定 */
         .failed-words-title {
             font-size: 20px;
             color: #ff4d4f;
@@ -685,15 +709,16 @@
             min-height: 32px;
         }
         
-        /* 内部滚动区域占满剩余高度，并允许滚动 */
         .failed-words-content {
-            flex: 1 1 auto;
-            overflow-y: auto;
+            /* 移除固定高度限制，让内容完全展开，不滚动 */
+            flex: 0 1 auto;
+            overflow: visible;  /* 取消滚动 */
             padding: 3px;
             min-height: 0;
+            /* 内部内容自然撑开高度，但父容器有最小高度保证 */
         }
         
-        /* ===== 满分励志语样式 ===== */
+        /* ----- 满分无错时显示三行励志语 (应用立体阴影) ----- */
         .full-score-message {
             font-weight: bold;
             line-height: 1.8;
@@ -703,19 +728,35 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100%;
+            /* 高度自动，由内容撑开，但父容器 .failed-words-container 有最小高度保证 */
+            height: 100%;  /* 占满父容器高度以实现垂直居中 */
+            width: 100%;
             padding: 6px 0;
             white-space: nowrap;
+            /* 添加与 victory-message 相同的立体阴影效果 */
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.4);
         }
         
-        /* 电脑端字体大小 */
+        /* 固定三行励志语时，通过父容器 .failed-words-content.centered-content 实现垂直居中，但容器高度仍由内容撑开 */
+        .failed-words-content.centered-content {
+            display: flex;
+            align-items: center;      /* 垂直居中 */
+            justify-content: center;  /* 水平居中（可选） */
+            height: 100%;             /* 占满父容器高度，以实现垂直居中 */
+            min-height: 0;
+            width: 100%;
+        }
+        
         @media (min-width: 1024px) {
             .full-score-message {
                 font-size: 28px;
             }
+            /* 电脑端最小高度适当调整，容纳4个单词 */
+            .failed-words-container {
+                min-height: 280px;  /* 电脑端字体更大，需要更高 */
+            }
         }
         
-        /* 手机端字体大小 - 使用vw单位确保完整显示 */
         @media (max-width: 768px) {
             .full-score-message {
                 font-size: 4.8vw;
@@ -733,6 +774,10 @@
                 overflow: visible;
                 text-overflow: clip;
                 white-space: nowrap;
+            }
+            /* 手机端最小高度容纳4个单词 */
+            .failed-words-container {
+                min-height: 220px;  /* 手机端字体稍小，适当调整 */
             }
         }
         
@@ -772,6 +817,9 @@
             justify-content: space-between;
             align-items: center;
             transition: all 0.2s;
+            /* 保证每一条都完整可见，无溢出 */
+            flex-wrap: wrap;
+            word-break: break-word;
         }
         
         .failed-word-item:hover {
@@ -860,6 +908,7 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
             border: 2px solid rgba(255, 255, 255, 0.5);
             width: 100%;
+            touch-action: manipulation;
         }
         
         .victory-btn:hover {
@@ -923,6 +972,7 @@
             border: 1px solid #d0d0d0;
             transition: all 0.2s;
             user-select: none;
+            touch-action: manipulation;
         }
         
         .window-btn:hover {
@@ -1008,6 +1058,7 @@
             transition: all 0.3s;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
             border: 2px solid rgba(255, 255, 255, 0.5);
+            touch-action: manipulation;
         }
         
         .close-confirm-btn.confirm {
@@ -1067,13 +1118,15 @@
             50% { opacity: 0.7; }
         }
         
-        /* 手机端优化 */
+        /* ========== 手机端优化（紧凑+姓名字体更大） ========== */
         @media (max-width: 768px) {
+            /* 移除手机端的固定高度限制，适应内容展开，但保留最小高度 */
             .failed-words-container {
-                height: 190px;
-                max-height: 190px;
-                min-height: 190px;
+                height: auto;
+                max-height: none;
+                min-height: 220px;  /* 手机端最小高度容纳4个单词 */
             }
+            
             .failed-words-title {
                 height: 28px;
                 min-height: 28px;
@@ -1086,20 +1139,66 @@
             }
             
             .victory-container {
-                max-height: 95vh;
+                /* 移除最大高度限制，允许自由伸展 */
+                max-height: none;
                 margin: 0 auto;
                 width: 95%;
+                padding: 8px; /* 更紧凑的内边距 */
+            }
+
+            .victory-username {
+                font-size: 28px;  /* 手机端姓名大小 */
+                margin-bottom: 0;  /* 减少底部间距 */
+                line-height: 1.1;
+            }
+
+            .victory-message {
+                margin: 0 0 2px 0; /* 减小上下边距 */
+            }
+
+            .file-name-display {
+                margin-bottom: 0;   /* 更紧凑 */
+                padding: 5px 6px;
+            }
+
+            .victory-score {
+                margin: 2px 0 4px 0; /* 略微调整 */
+                padding: 6px;
+            }
+
+            /* ----- 手机端：确保单词预览窗口的关闭按钮始终位于卡片内，不超出边界 ----- */
+            .word-list-container {
+                padding: 10px 10px 20px 10px; /* 增加底部内边距，让关闭按钮远离边框 */
+                overflow-y: auto;               /* 内容过多时滚动，所有内容均在容器内 */
+            }
+            .word-list-close-btn {
+                margin: 10px auto 0 auto;       /* 上边距10px，左右auto居中，底部0 */
+                margin-top: auto;                /* 在flex列布局中推到底部（配合flex:1） */
+            }
+            /* 手机端滑动区域也适当收缩 */
+            .word-list-content {
+                max-height: 320px; /* 手机端减少高度，给按钮留空间 */
+                min-height: 280px;
             }
         }
         
         @media (max-width: 480px) {
             .failed-words-container {
-                height: 170px;
-                max-height: 170px;
-                min-height: 170px;
+                height: auto;
+                max-height: none;
+                min-height: 220px;
+            }
+
+            .victory-username {
+                font-size: 32px;   /* 极小屏也保持较大 */
+            }
+            .word-list-content {
+                max-height: 280px;
+                min-height: 240px;
             }
         }
         
+        /* ========== 电脑端 (宽度 ≥1024px) 布局优化 ========== */
         @media (min-width: 1024px) {
             body {
                 padding: 15px;
@@ -1147,24 +1246,28 @@
                 font-size: 14px;
             }
             
+            /* 加大英文提示字体 */
             .english-prompt-container {
-                font-size: 24px;
-                padding: 10px 12px;
-                min-height: 60px;
-            }
-            
-            .option-btn {
-                font-size: 20px;
-                padding: 12px 18px 12px 50px;
+                font-size: 30px;      /* 原24px，加大 */
+                padding: 12px 15px;    /* 适当增加内边距 */
                 min-height: 70px;
-                border-radius: 9px;
             }
             
+            /* 调整选项按钮：缩小高度和文字，增大按钮之间的间距（gap） */
+            .options-container {
+                gap: 12px;                     /* 原6px，增加间距以提升行距感 */
+                padding: 10px;
+            }
+            .option-btn {
+                font-size: 22px;                 /* 原24px，略缩小 */
+                padding: 12px 20px 12px 60px;     /* 减小上下内边距以降低高度 */
+                min-height: 70px;                  /* 原85px，降低高度 */
+            }
             .option-label {
-                width: 36px;
-                height: 36px;
-                font-size: 17px;
-                left: 10px;
+                width: 42px;                      /* 原44px，微调适配 */
+                height: 42px;
+                font-size: 20px;                  /* 原22px，略缩小 */
+                left: 14px;
             }
             
             .control-btn {
@@ -1191,21 +1294,47 @@
                 padding: 8px;
             }
             
-            .options-container {
-                gap: 6px;
-                padding: 10px;
-            }
-            
             .victory-container {
                 max-width: 1000px;
                 width: 95%;
-                max-height: 85vh;
+                /* 移除最大高度限制，允许自由伸展 */
+                max-height: none;
+                padding: 20px;
             }
             
+            /* 电脑端：未过关单词容器高度自动，但设置最小高度容纳4个单词 */
             .failed-words-container {
-                height: 230px;
-                max-height: 230px;
-                min-height: 230px;
+                height: auto;
+                max-height: none;
+                min-height: 280px;  /* 电脑端最小高度容纳4个单词 */
+            }
+            
+            /* 电脑端：姓名字体调小，励志语字体调大，但不超过姓名 */
+            .victory-username {
+                font-size: 56px;  /* 电脑端姓名大小 */
+                margin-bottom: 6px;
+                line-height: 1.2;
+                /* 阴影继承自基础样式，已增强 */
+            }
+            
+            .victory-message {
+                font-size: 52px !important;  /* 原28px，大幅增大，略小于姓名 */
+                text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.4);
+            }
+            
+            /* 将下方三个按钮水平排列在一行 */
+            .victory-buttons {
+                flex-direction: row;        /* 水平排列 */
+                gap: 12px;                  /* 按钮间距 */
+                margin-top: 15px;            /* 适当增加上边距 */
+            }
+            
+            .victory-btn {
+                width: auto;                 /* 取消固定宽度，让 flex 控制 */
+                flex: 1;                     /* 三个按钮等宽 */
+                padding: 12px 8px;            /* 调整内边距，确保文字不换行 */
+                font-size: 16px;              /* 维持字体大小 */
+                white-space: nowrap;          /* 防止按钮文字换行 */
             }
             
             .victory-score {
@@ -1227,43 +1356,111 @@
                 max-height: 85vh;
                 padding: 16px;
                 margin: 12px 0 25px;
+                max-width: 1200px;
+                width: 95%;
             }
             
             .word-list-title {
-                font-size: 26px;
+                font-size: 28px;
             }
             
             .word-list-header {
+                font-size: 22px;
+                padding: 10px 15px;
+            }
+            
+            .word-list-stats {
                 font-size: 18px;
-                padding: 7px 10px;
+                padding: 8px 12px;
             }
             
             .word-list-content {
-                max-height: 480px;
-                min-height: 380px;
+                max-height: 400px; /* 电脑端也从500px减少到400px */
+                min-height: 320px;
             }
             
             .word-list-table th {
-                font-size: 15px;
-                padding: 7px 8px;
+                font-size: 20px;
+                padding: 12px 15px;
             }
             
             .word-list-table td {
-                font-size: 14px;
-                padding: 5px 8px;
+                font-size: 18px;
+                padding: 10px 15px;
             }
             
             .word-english {
-                font-size: 15px;
+                font-size: 20px;
             }
             
             .word-chinese {
-                font-size: 14px;
+                font-size: 18px;
             }
             
             .word-list-close-btn {
-                font-size: 16px;
-                padding: 9px 18px;
+                font-size: 18px;
+                padding: 12px 20px;
+            }
+
+            /* ----- 关闭确认弹窗：宽度与主界面一致，字体增大 ----- */
+            .close-confirm-container {
+                max-width: 1200px;
+                width: 95%;
+                padding: 30px;
+                border-width: 5px;
+            }
+            
+            .close-confirm-title {
+                font-size: 32px;
+                margin-bottom: 16px;
+            }
+            
+            .close-confirm-message {
+                font-size: 22px;
+                padding: 15px;
+                margin-bottom: 24px;
+                line-height: 1.5;
+            }
+            
+            .close-confirm-btn {
+                font-size: 22px;
+                padding: 15px 20px;
+                border-radius: 30px;
+            }
+
+            /* ===== 满分励志语字体放大，容器高度由内容撑开，但父容器有最小高度保证 ===== */
+            .full-score-message {
+                font-size: 36px;        /* 原28px，进一步放大至36px */
+                line-height: 1.5;
+            }
+            
+            /* 电脑端居中容器占满父容器高度 */
+            .failed-words-content.centered-content {
+                height: 100%;
+                min-height: 0;
+            }
+        }
+
+        /* 新增：用于无未过关单词时，让 failed-words-content 垂直居中显示三行励志语 */
+        .failed-words-content.centered-content {
+            display: flex;
+            align-items: center;      /* 垂直居中 */
+            justify-content: center;  /* 水平居中（可选） */
+            height: 100%;             /* 占满父容器高度 */
+            min-height: 0;
+            width: 100%;
+        }
+        .failed-words-content.centered-content .full-score-message {
+            height: auto;             /* 取消固定高度，由内容撑开 */
+            width: 100%;              /* 保证文字区域水平居中 */
+        }
+        
+        @media (max-width: 768px) {
+            .failed-words-content.centered-content {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
             }
         }
         
@@ -1390,10 +1587,10 @@
             
             .victory-container {
                 min-height: auto;
-                max-height: 95vh;
+                max-height: none;
                 padding: 12px;
                 margin: 0 auto;
-                overflow-y: auto;
+                overflow-y: visible;
             }
             
             .victory-title {
@@ -1406,7 +1603,7 @@
             }
             
             .victory-message {
-                font-size: 16px;
+                font-size: 17px;
                 margin: 2px 0;
             }
             
@@ -1458,11 +1655,7 @@
                 font-size: 14px;
             }
             
-            .failed-words-container {
-                max-height: 190px;
-                min-height: 190px;
-                height: 190px;
-            }
+            /* 手机端容器高度自动，但有最小高度保证 */
             
             .window-controls {
                 bottom: 6px;
@@ -1480,7 +1673,8 @@
             .word-list-container {
                 min-height: 500px;
                 max-height: 85vh;
-                padding: 10px;
+                padding: 10px 10px 20px 10px; /* 确保底部内边距足够，按钮不贴边 */
+                overflow-y: auto;
             }
             
             .word-list-title {
@@ -1493,8 +1687,8 @@
             }
             
             .word-list-content {
-                max-height: 380px;
-                min-height: 340px;
+                max-height: 320px; /* 手机端进一步收缩，让按钮可见 */
+                min-height: 280px;
                 padding: 8px;
             }
             
@@ -1506,6 +1700,12 @@
             .word-list-table td {
                 font-size: 12px;
                 padding: 3px 4px;
+            }
+
+            /* 手机端关闭按钮样式微调，确保不超出 */
+            .word-list-close-btn {
+                margin: 10px auto 0 auto;
+                margin-top: auto;
             }
         }
         
@@ -1524,6 +1724,92 @@
                 font-size: 18px;
             }
         }
+
+        /* ===== 新增：自定义姓名输入模态框 ===== */
+        #nameInputOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .name-input-container {
+            background: white;
+            padding: 24px;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 340px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .name-input-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .name-input-field {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 18px;
+            border: 2px solid #40a9ff;
+            border-radius: 30px;
+            outline: none;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            -webkit-appearance: none;
+        }
+
+        .name-input-field:focus {
+            border-color: #1890ff;
+            box-shadow: 0 0 0 3px rgba(24,144,255,0.2);
+        }
+
+        .name-input-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .name-input-btn {
+            flex: 1;
+            padding: 12px 0;
+            font-size: 18px;
+            border: none;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            touch-action: manipulation;
+        }
+
+        .name-input-btn.confirm {
+            background: linear-gradient(45deg, #52c41a, #73d13d);
+            color: white;
+        }
+
+        .name-input-btn.confirm:hover {
+            background: linear-gradient(45deg, #73d13d, #52c41a);
+        }
+
+        .name-input-btn.cancel {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .name-input-btn.cancel:hover {
+            background: #e0e0e0;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1535,7 +1821,7 @@
             <div class="closing-icon">
                 <i class="fas fa-power-off"></i>
             </div>
-            <div class="closing-message" id="closingMessage">正在关闭百词斩游戏...</div>
+            <div class="closing-message" id="closingMessage">正在关闭百词砍游戏...</div>
         </div>
     </div>
     
@@ -1544,7 +1830,7 @@
         <div class="close-confirm-container">
             <h2 class="close-confirm-title">确认关闭</h2>
             <div class="close-confirm-message" id="closeConfirmMessage">
-                您确定要关闭百词斩游戏吗？<br><br>
+                您确定要关闭百词砍游戏吗？<br><br>
                 <span style="color: #ff4d4f; font-weight: bold;">注意：</span>当前游戏进度将不会保存！
             </div>
             <div class="close-confirm-buttons">
@@ -1558,7 +1844,7 @@
         </div>
     </div>
     
-    <!-- 单词列表预览弹窗 -->
+    <!-- 单词列表预览弹窗（关闭按钮已移入容器内部，滑动区域已向上收缩） -->
     <div id="wordListOverlay">
         <div class="word-list-container">
             <h2 class="word-list-title"><i class="fas fa-list"></i> 单词列表预览</h2>
@@ -1571,9 +1857,22 @@
             <div class="word-list-content" id="wordListContent">
                 <!-- 单词列表将在这里动态生成 -->
             </div>
+            <!-- 关闭按钮已移入容器内部，位于底部，且通过内边距确保完全可见 -->
             <button class="word-list-close-btn" onclick="closeWordList()">
                 <i class="fas fa-times"></i> 关闭单词列表
             </button>
+        </div>
+    </div>
+
+    <!-- 新增：自定义姓名输入模态框 -->
+    <div id="nameInputOverlay">
+        <div class="name-input-container">
+            <div class="name-input-title">请输入您的姓名</div>
+            <input type="text" id="nameInputField" class="name-input-field" placeholder="姓名" value="">
+            <div class="name-input-buttons">
+                <button class="name-input-btn confirm" id="nameInputConfirm">确定</button>
+                <button class="name-input-btn cancel" id="nameInputCancel">取消</button>
+            </div>
         </div>
     </div>
     
@@ -1589,12 +1888,13 @@
     
     <!-- 游戏标题 -->
     <div class="game-title">
-        <i class="fas fa-book"></i> 百词斩 <i class="fas fa-gamepad"></i>
+        <i class="fas fa-book"></i> 百词砍 <i class="fas fa-gamepad"></i>
     </div>
     
     <!-- 游戏控制区域 -->
     <div id="gameControl">
         <div class="control-buttons">
+            <!-- 上传按钮直接触发隐藏的 file input -->
             <button class="control-btn" onclick="document.getElementById('wordFile').click()">
                 <i class="fas fa-upload"></i> 上传单词表
             </button>
@@ -1602,7 +1902,10 @@
         </div>
         
         <div class="username-row">
-            <button id="usernameBtn" class="control-btn"><i class="fas fa-user"></i> <span id="usernameDisplay">输入姓名</span></button>
+            <!-- 姓名按钮：点击弹出自定义模态框 -->
+            <button id="usernameBtn" class="control-btn" onclick="showNameInput()">
+                <i class="fas fa-user"></i> <span id="usernameDisplay">输入姓名</span>
+            </button>
             <button id="controlBtn" onclick="toggleGame()"><i class="fas fa-play"></i> 挑战开始</button>
         </div>
         
@@ -1694,19 +1997,36 @@
             }
         }
 
-        function setupUsernameHandlers() {
-            const usernameBtn = document.getElementById('usernameBtn');
-            if (usernameBtn) {
-                usernameBtn.addEventListener('click', () => {
-                    const newName = prompt('请输入您的姓名', username);
-                    if (newName !== null) {
-                        const trimmed = newName.trim();
-                        username = trimmed;
-                        saveUsername(trimmed);
-                        updateUsernameButton();
-                    }
-                });
+        // 显示自定义姓名输入模态框
+        function showNameInput() {
+            const overlay = document.getElementById('nameInputOverlay');
+            const inputField = document.getElementById('nameInputField');
+            inputField.value = username; // 预设当前用户名
+            overlay.style.display = 'flex';
+            // 自动聚焦输入框（对移动端友好）
+            setTimeout(() => inputField.focus(), 100);
+        }
+
+        // 隐藏模态框
+        function hideNameInput() {
+            document.getElementById('nameInputOverlay').style.display = 'none';
+        }
+
+        // 确认姓名
+        function confirmName() {
+            const inputField = document.getElementById('nameInputField');
+            const newName = inputField.value.trim();
+            if (newName !== '') {
+                username = newName;
+                saveUsername(newName);
+                updateUsernameButton();
+            } else {
+                // 如果为空，可以选择清空或忽略
+                username = '';
+                saveUsername('');
+                updateUsernameButton();
             }
+            hideNameInput();
         }
 
         // ==================== 游戏核心逻辑 ====================
@@ -1732,7 +2052,15 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             loadUsername();
-            setupUsernameHandlers();
+
+            // 为自定义模态框的按钮绑定事件
+            document.getElementById('nameInputConfirm').addEventListener('click', confirmName);
+            document.getElementById('nameInputCancel').addEventListener('click', hideNameInput);
+            // 点击遮罩层也可关闭
+            document.getElementById('nameInputOverlay').addEventListener('click', function(e) {
+                if (e.target === this) hideNameInput();
+            });
+
             document.querySelectorAll('.window-btn').forEach(btn => {
                 btn.addEventListener('mouseenter', () => {
                     playSystemSound('click');
@@ -2001,6 +2329,7 @@
             return false;
         }
 
+        // ========== 游戏结束界面：励志语颜色控制（满分红色，其余黑色），未过关单词列表完整展开，无需滚动 ==========
         function showGameOverScreen(message, remainingWords, finalScore, correctRate, totalWords, maxPossibleScore, actualTime) {
             isPlaying = false;
             stopTimer();
@@ -2040,22 +2369,24 @@
             }
             
             let encouragementText = "";
-            let messageColor = "#333";
+            let messageColor = "#333"; // 默认黑色（#333深灰，视觉上接近黑色且柔和）
+            
+            // 正确率100%时保留红色，其余改为黑色（#333）
             if (correctRate === 100) {
                 encouragementText = "须知少时凌云志，曾许人间第一流。";
-                messageColor = "#ff4d4f";
+                messageColor = "#ff4d4f"; // 红色
             } else if (correctRate >= 80) {
                 encouragementText = "不想满心遗憾，那就拼尽全力。";
-                messageColor = "#1890ff";
+                messageColor = "#E67E22"; // 南瓜橙
             } else if (correctRate >= 60) {
                 encouragementText = "同是窗寒苦读，怎愿甘拜下风。";
-                messageColor = "#faad14";
+                messageColor = "#1E88E5"; // 宝蓝
             } else if (finalScore > 0) {
                 encouragementText = "知不足而奋进，望远山而前行。";
-                messageColor = "#666";
+                messageColor = "#1B7F79"; // 松石绿
             } else {
                 encouragementText = "前方无绝路，希望在转角。";
-                messageColor = "#666";
+                messageColor = "#333333"; // 炭黑色
             }
             
             const displayText = (remainingWords > 0) ? message : encouragementText;
@@ -2067,6 +2398,7 @@
                 victoryUsername.style.display = 'none';
             }
             
+            // 设置励志语文本和颜色（阴影已在CSS中统一添加）
             victoryMessage.textContent = displayText;
             victoryMessage.style.color = messageColor;
             
@@ -2102,6 +2434,7 @@
             failedWordsContainer.style.display = 'flex';
             
             if (failedWords.length > 0) {
+                // 有未过关单词：完整列出所有单词，不限制高度，无滚动条
                 failedWordsContent.innerHTML = '';
                 failedWordsCount.textContent = failedWords.length + '个';
                 failedWords.forEach(word => {
@@ -2112,7 +2445,7 @@
                     const typeText = word.type === 'click-wrong' ? '点击错误' : '超时未完成';
                     const typeClass = word.type === 'click-wrong' ? 'click-wrong-type' : 'timeout-type';
                     item.innerHTML = `
-                        <div style="display: flex; align-items: center;">
+                        <div style="display: flex; align-items: center; flex-wrap: wrap;">
                             <div class="failed-word-icon ${iconClass}">
                                 <i class="fas ${icon}"></i>
                             </div>
@@ -2123,8 +2456,10 @@
                     `;
                     failedWordsContent.appendChild(item);
                 });
+                // 有单词时移除居中类
+                failedWordsContent.classList.remove('centered-content');
             } else {
-                // 无未过关单词：显示三行励志语
+                // 无未过关单词：显示三行励志语（已应用阴影，通过 .full-score-message 的 text-shadow 实现）
                 failedWordsContent.innerHTML = `
                     <div class="full-score-message">
                         <div>愿你历经万难，仍有少年凌云志；</div>
@@ -2133,6 +2468,8 @@
                     </div>
                 `;
                 failedWordsCount.textContent = '0个';
+                // 添加居中类，实现flex垂直居中，容器占满父容器高度，而父容器有最小高度保证视觉稳定
+                failedWordsContent.classList.add('centered-content');
             }
             
             victoryOverlay.style.display = 'flex';
@@ -2143,6 +2480,7 @@
             btn.style.background = 'linear-gradient(45deg, #36cfc9, #1890ff)';
         }
 
+        // ==================== 文件上传相关函数 ====================
         function loadWords(file) {
             if (!file) {
                 alert('请选择一个文件！');
@@ -2368,7 +2706,8 @@
                     </tr>
                 `;
             });
-            tableHTML += `</tbody></table>`;
+            tableHTML += `</tbody>
+                </table>`;
             wordListContent.innerHTML = tableHTML;
             wordListOverlay.style.display = 'flex';
             setTimeout(() => { wordListContent.scrollTop = 0; }, 100);
@@ -2378,7 +2717,7 @@
             console.log("关闭单词列表预览");
             playSystemSound('click');
             document.getElementById('wordListOverlay').style.display = 'none';
-            alert(`单词表加载成功！\n\n文件名: ${currentFileName}\n单词数量: ${currentWords.length}个\n\n现在可以点击"挑战开始"按钮开始游戏！`);
+            
         }
 
         function resetGameState() {
@@ -2624,17 +2963,15 @@
                 }
                 console.log("游戏开始");
             } else {
-                if (!isPlaying) {
-                    btn.innerHTML = '<i class="fas fa-play"></i> 重新挑战';
-                    btn.style.background = 'linear-gradient(45deg, #36cfc9, #1890ff)';
-                }
+                // 游戏进行中点击按钮暂停？目前设计是点击开始后按钮文字不变，但保留逻辑
             }
         }
 
         function closeVictoryScreen() {
             document.getElementById('victoryOverlay').style.display = 'none';
         }
-        
+
+        // ==================== 截图功能（高清增强版） ====================
         async function captureScreenshot() {
             playSystemSound('screenshot');
             
@@ -2644,7 +2981,7 @@
                 return;
             }
             
-            const loadingToast = createToast('正在生成截图...', 'info');
+            const loadingToast = createToast('正在生成高清截图...', 'info');
             document.body.appendChild(loadingToast);
             
             try {
@@ -2669,13 +3006,22 @@
                 
                 await new Promise(resolve => setTimeout(resolve, 100));
                 
+                // ========== 核心清晰度提升：scale 从 2 提高至 4，增加 imageTimeout 和 onclone 回调 ==========
                 const canvas = await html2canvas(clone, {
-                    scale: 2,
+                    scale: 4,                     // 4倍超采样，文字边框极致锐利
                     backgroundColor: null,
                     allowTaint: true,
                     useCORS: true,
                     logging: false,
-                    imageTimeout: 30000,
+                    imageTimeout: 60000,           // 增加超时时间，确保大图渲染完整
+                    onclone: function(clonedDoc) {
+                        // 在克隆文档中优化字体渲染，保证高分辨率下清晰
+                        const clonedVictory = clonedDoc.querySelector('.victory-container');
+                        if (clonedVictory) {
+                            clonedVictory.style.textRendering = 'geometricPrecision';
+                            clonedVictory.style.webkitFontSmoothing = 'antialiased';
+                        }
+                    }
                 });
                 
                 document.body.removeChild(cloneWrapper);
@@ -2686,19 +3032,19 @@
                 
                 const link = document.createElement('a');
                 
-                // 修改截图文件名格式：姓名_百词斩成绩单_对应的单词表名称_日期
-                // 处理文件名：移除可能不合法的字符
+                // 命名规则：姓名【分数】单词表名称_日期.png
                 const safeUsername = (username || '玩家').replace(/[\\/:*?"<>|]/g, '_');
-                const safeFileName = (currentFileName ? currentFileName.replace(/\.[^/.]+$/, '') : '未命名').replace(/[\\/:*?"<>|]/g, '_');
+                const scorePart = `【${score}分】`;
+                const baseName = currentFileName ? currentFileName.replace(/\.[^/.]+$/, '') : '未命名';
+                const safeFileName = baseName.replace(/[\\/:*?"<>|]/g, '_');
                 
-                // 格式化日期：YYYY-MM-DD
                 const now = new Date();
                 const year = now.getFullYear();
                 const month = String(now.getMonth() + 1).padStart(2, '0');
                 const day = String(now.getDate()).padStart(2, '0');
-                const dateStr = `${year}-${month}-${day}`;
+                const dateStr = `${year}${month}${day}`;  // YYYYMMDD 格式
                 
-                const fileName = `${safeUsername}_百词斩成绩单_${safeFileName}_${dateStr}.png`;
+                const fileName = `${safeUsername}${scorePart}${safeFileName}_${dateStr}.png`;
                 
                 canvas.toBlob((blob) => {
                     const url = URL.createObjectURL(blob);
@@ -2710,7 +3056,7 @@
                         URL.revokeObjectURL(url);
                     }, 100);
                     
-                    const successToast = createToast('截图保存成功！', 'success');
+                    const successToast = createToast('高清截图保存成功！', 'success');
                     document.body.appendChild(successToast);
                     
                     setTimeout(() => {
@@ -2739,7 +3085,7 @@
                 alert('截图失败，错误：' + error.message);
             }
         }
-        
+
         function createToast(message, type = 'info') {
             const toast = document.createElement('div');
             const colors = {
@@ -2780,7 +3126,7 @@
             
             return toast;
         }
-        
+
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 if (document.documentElement.requestFullscreen) {
@@ -2806,28 +3152,28 @@
                 playSystemSound('click');
             }
         }
-        
+
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
         document.addEventListener('msfullscreenchange', handleFullscreenChange);
-        
+
         function handleFullscreenChange() {
             const maximizeBtn = document.querySelector('.window-btn.maximize i');
             if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
                 if (maximizeBtn) maximizeBtn.className = 'fas fa-window-maximize';
             }
         }
-        
+
         function showCloseConfirm() {
             playSystemSound('wrong');
             document.getElementById('closeConfirmOverlay').style.display = 'flex';
         }
-        
+
         function cancelClose() {
             playSystemSound('click');
             document.getElementById('closeConfirmOverlay').style.display = 'none';
         }
-        
+
         function confirmClose() {
             playSystemSound('close');
             const closingAnimation = document.getElementById('closingAnimation');
@@ -2839,7 +3185,7 @@
                 setTimeout(() => {
                     closingMessage.textContent = "正在释放资源...";
                     setTimeout(() => {
-                        closingMessage.textContent = "百词斩游戏已关闭";
+                        closingMessage.textContent = "百词砍游戏已关闭";
                         const isOpenedByJS = window.opener || window.history.length <= 1;
                         setTimeout(() => {
                             try {
